@@ -1,0 +1,27 @@
+NameVirtualHost *:8002
+Listen 8002
+<VirtualHost *:8002>
+    ServerAdmin webmaster@localhost
+
+    # Adding the sessions environment
+    WSGIScriptAlias / /env/games/games-api/config/wsgi.py
+    WSGIProcessGroup games-api
+    WSGIDaemonProcess games-api user=www-data group=www-data python-path=/env/games/games-api:/env/games/games-model:/env/sessions/sessions-model
+ 
+    # Adding the python path for running wsgi scripts
+    WSGIPassAuthorization On
+
+    # Adding the static files for the rest API
+    Alias /static /env/games/games-api/config/static
+
+    <Directory /env/games/games-api/config/static>
+        Order deny,allow
+        Allow from all
+    </Directory>
+
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+
+    # Possible values include: debug, info, notice, warn, error, crit,
+    # alert, emerg.
+    LogLevel debug
+</VirtualHost>
